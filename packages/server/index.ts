@@ -7,6 +7,10 @@ app.get('/', (req: Request, res: Response) => {
 	res.send(process.env.OPENAI_API_KEY);
 });
 
+app.get('/api/hello', (req: Request, res: Response) => {
+	res.send({ message: 'Hello' });
+});
+
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
 });
