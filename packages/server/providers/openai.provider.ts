@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import type { ChatResponse } from '../util/types';
 
 const client = new OpenAI({
    apiKey: process.env.OPENAI_API_KEY,
@@ -7,7 +8,7 @@ const client = new OpenAI({
 export async function openaiChat(
    prompt: string,
    session: { lastResponseId: string | null }
-) {
+): Promise<ChatResponse> {
    const response = await client.responses.create({
       model: 'gpt-4.1-mini',
       input: prompt,
@@ -16,5 +17,5 @@ export async function openaiChat(
 
    session.lastResponseId = response.id;
 
-   return response.output_text;
+   return { id: response.id, message: response.output_text };
 }

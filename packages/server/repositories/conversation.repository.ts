@@ -3,56 +3,66 @@ export type OllamaSession = { messages: any[] };
 
 const conversations = new Map<string, OpenAISession | OllamaSession>();
 
-export function createConversation(
-   conversationId: string,
-   provider: 'openai' | 'ollama'
-) {
-   if (conversations.has(conversationId)) {
-      return conversations.get(conversationId);
-   }
+export const conversationRepository = {
+   // Core CRUD operations
+   create: function (conversationId: string, provider: 'openai' | 'ollama') {
+      if (conversations.has(conversationId)) {
+         return conversations.get(conversationId);
+      }
 
-   const session =
-      provider === 'openai' ? { lastResponseId: null } : { messages: [] };
+      const session =
+         provider === 'openai' ? { lastResponseId: null } : { messages: [] };
 
-   conversations.set(conversationId, session);
-   return session;
-}
+      conversations.set(conversationId, session);
+      return session;
+   },
 
-export function getConversation(conversationId: string) {
-   return conversations.get(conversationId) || null;
-}
+   get: function (conversationId: string) {
+      return conversations.get(conversationId) || null;
+   },
 
-export function updateConversation(
-   conversationId: string,
-   session: OpenAISession | OllamaSession
-) {
-   conversations.set(conversationId, session);
-}
+   update: function (
+      conversationId: string,
+      session: OpenAISession | OllamaSession
+   ) {
+      conversations.set(conversationId, session);
+   },
 
-export function getLastResponseId(conversationId: string) {
-   const session = conversations.get(conversationId);
-   if (!session) return null;
+   getAll: function () {
+      return conversations;
+   },
 
-   // Only OpenAI sessions have lastResponseId
-   if ('lastResponseId' in session) {
-      return session.lastResponseId;
-   }
+   // Provider-specific operations
+   getLastResponseId: function (conversationId: string) {
+      const session = conversations.get(conversationId);
+      if (!session) return null;
 
-   return null;
-}
+      // Only OpenAI sessions have lastResponseId
+      if ('lastResponseId' in session) {
+         return session.lastResponseId;
+      }
 
-export function getMessages(conversationId: string) {
-   const session = conversations.get(conversationId);
-   if (!session) return [];
+      return null;
+   },
 
-   // Only Ollama sessions have messages
-   if ('messages' in session) {
-      return session.messages;
-   }
+   getMessages: function (conversationId: string) {
+      const session = conversations.get(conversationId);
+      if (!session) return [];
 
-   return [];
-}
+      // Only Ollama sessions have messages
+      if ('messages' in session) {
+         return session.messages;
+      }
 
-export function getConversations() {
-   return conversations;
-}
+      return [];
+   },
+
+   // Utility operations
+   exists: function (conversationId: string) {
+      return conversations.has(conversationId);
+   },
+
+   delete: function (conversationId: string) {
+      return conversations.delete(conversationId);
+   },
+};

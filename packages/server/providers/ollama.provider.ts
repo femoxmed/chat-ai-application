@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import type { ChatResponse } from '../util/types';
 
 const client = new OpenAI({
    baseURL: process.env.OLLAMA_BASE_URL,
@@ -8,7 +9,7 @@ const client = new OpenAI({
 export async function ollamaChat(
    prompt: string,
    session: { messages: OpenAI.Chat.ChatCompletionMessageParam[] }
-) {
+): Promise<ChatResponse> {
    session.messages.push({ role: 'user', content: prompt });
 
    const response = await client.chat.completions.create({
@@ -29,5 +30,5 @@ export async function ollamaChat(
 
    session.messages.push({ role: 'assistant', content: reply });
 
-   return reply;
+   return { id: response.id, message: reply };
 }
