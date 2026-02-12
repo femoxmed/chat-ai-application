@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import Chatbox from './components/chat/Chatbox';
 
 function App() {
-   const [message, setMessage] = useState('');
+   const [, setMessage] = useState('');
    useEffect(() => {
       fetch('/api/hello')
          .then((res) => res.json())
          .then((data) => setMessage(data.message));
    });
 
-   return <p className="font-bold pb-4 text-3xl">{message}</p>;
+   return (
+      <div>
+         <Chatbox />
+      </div>
+   );
 }
 
 export default App;
