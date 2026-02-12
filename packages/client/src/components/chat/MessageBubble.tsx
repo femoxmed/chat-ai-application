@@ -9,10 +9,18 @@ interface Message {
 interface MessageBubbleProps {
    message: Message;
 }
+const onCopy = (e: React.ClipboardEvent<HTMLDivElement>) => {
+   const selection = window.getSelection()?.toString().trim();
+   if (selection) {
+      e.preventDefault();
+      e.clipboardData.setData('text/plain', selection);
+   }
+};
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
    return (
       <div
+         onCopy={onCopy}
          className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
       >
          <div
