@@ -12,6 +12,8 @@ export async function openaiChat(
    const response = await client.responses.create({
       model: 'gpt-4.1-mini',
       input: prompt,
+      temperature: 0.2,
+      max_output_tokens: 100,
       previous_response_id: session.lastResponseId || undefined,
    });
 

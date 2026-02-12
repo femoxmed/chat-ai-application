@@ -14,7 +14,9 @@ export async function ollamaChat(
 
    const response = await client.chat.completions.create({
       model: 'llama3',
+      temperature: 0.2,
       messages: session.messages,
+      max_completion_tokens: 100,
    });
    // Add proper null/undefined checks
    if (!response.choices || response.choices.length === 0) {

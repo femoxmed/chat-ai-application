@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { MessageBubble } from './MessageBubble';
 import { LoadingIndicator } from './LoadingIndicator';
 
@@ -17,8 +17,32 @@ export const MessageList: React.FC<MessageListProps> = ({
    messages,
    isLoading,
 }) => {
+   const messagesEndRef = useRef<HTMLDivElement>(null);
+   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+   // Auto-scroll to bottom when messages change
+   useEffect(() => {
+      const scrollContainer = scrollContainerRef.current;
+      if (!scrollContainer) return;
+
+      // Check if user is near the bottom (within 100px)
+      const isNearBottom =
+         scrollContainer.scrollHeight -
+            scrollContainer.scrollTop -
+            scrollContainer.clientHeight <
+         100;
+
+      // Only auto-scroll if user is near the bottom or if it's a new message
+      if (isNearBottom || messages.length > 1) {
+         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+   }, [messages]);
+
    return (
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div
+         ref={scrollContainerRef}
+         className="flex-1 overflow-y-auto p-6 space-y-4"
+      >
          {messages.length === 0 && (
             <div className="text-center py-12">
                <div className="text-gray-400 mb-4">
@@ -47,6 +71,7 @@ export const MessageList: React.FC<MessageListProps> = ({
          ))}
 
          {isLoading && <LoadingIndicator />}
+         <div ref={messagesEndRef} />
       </div>
    );
 };
