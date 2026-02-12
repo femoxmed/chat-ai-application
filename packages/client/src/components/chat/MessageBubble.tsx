@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ReactMarkDown from 'react-markdown';
 interface Message {
    id: number;
    text: string;
@@ -22,7 +22,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                   : 'bg-gray-200 text-gray-800'
             }`}
          >
-            <p className="text-sm">{message.text}</p>
+            <p className="text-sm">
+               <ReactMarkDown>{message.text}</ReactMarkDown>
+            </p>
          </div>
       </div>
    );

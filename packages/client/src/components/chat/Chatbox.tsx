@@ -13,7 +13,6 @@ export default function Chatbox() {
    const [messages, setMessages] = useState<Message[]>([]);
    const [isLoading, setIsLoading] = useState(false);
 
-   // Generate and store unique conversation ID using crypto.randomUUID()
    const conversationIdRef = useRef<string>('');
 
    if (!conversationIdRef.current) {
