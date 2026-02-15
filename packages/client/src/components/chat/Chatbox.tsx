@@ -2,6 +2,14 @@ import { useState, useRef } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { MessageList } from './MessageList';
 import { ChatInput } from './ChatInput';
+import PopSound from '@/assets/sounds/pop.mp3';
+import NotificationSound from '@/assets/sounds/notification.mp3';
+
+const popAudio = new Audio(PopSound);
+popAudio.volume = 0.2;
+
+const notificationAudio = new Audio(NotificationSound);
+notificationAudio.volume = 0.2;
 
 interface Message {
    id: number;
@@ -29,7 +37,7 @@ export default function Chatbox() {
       };
       setMessages((prev) => [...prev, userMessage]);
       setIsLoading(true);
-
+      popAudio.play();
       try {
          const response = await fetch('/api/chat', {
             method: 'POST',
@@ -49,6 +57,7 @@ export default function Chatbox() {
             text: data.message,
             isUser: false,
          };
+         notificationAudio.play();
          setMessages((prev) => [...prev, aiMessage]);
       } catch (error) {
          console.error('Error:', error);
