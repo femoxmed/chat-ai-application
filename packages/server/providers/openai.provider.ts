@@ -1,3 +1,4 @@
+import { instructions } from './index';
 import OpenAI from 'openai';
 import type { ChatResponse } from '../util/types';
 
@@ -11,6 +12,7 @@ export async function openaiChat(
 ): Promise<ChatResponse> {
    const response = await client.responses.create({
       model: 'gpt-4.1-mini',
+      instructions,
       input: prompt,
       temperature: 0.2,
       max_output_tokens: 100,
